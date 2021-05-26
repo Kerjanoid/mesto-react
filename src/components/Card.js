@@ -1,21 +1,21 @@
-const Card = ({name, likes, link, onCardClick}) => {
+const Card = ({card, onCardClick}) => {
     const handleClick = () => {
-        onCardClick({name, link})
+        onCardClick(card)
     }
 
     return(
     <article className="element">
       <img className="element__img"
       onClick={handleClick}
-      src={link}
-      alt={name} />
+      src={card.link}
+      alt={card.name} />
       <div className="element__options">
-        <h2 className="element__title">{name}</h2>
+        <h2 className="element__title">{card.name}</h2>
         <div className="element__like-block">
             <button className="element__like"
             aria-label="лайк"
             type="button" />
-            <p className="element__like-counter">{likes.length}</p>
+            <p className="element__like-counter">{card.likes.length}</p>
         </div>
       </div>
       <button

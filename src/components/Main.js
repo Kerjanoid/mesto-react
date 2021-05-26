@@ -12,14 +12,20 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
 
     useEffect(() => {
         api.getUserInformation().then(({avatar, about, name}) => {
-          setUserAvatar(avatar)
-          setUserDescription(about)
-          setUserName(name)
+            setUserAvatar(avatar)
+            setUserDescription(about)
+            setUserName(name)
+        })
+        .catch((err)=>{
+            console.log(err)
         })
         api.getInitialCards().then((data) => {
-          setCards(data)
+            setCards(data)
         })
-      })
+        .catch((err)=>{
+            console.log(err)
+        })
+    }, [])
 
     return (
     <main className="content">
@@ -61,13 +67,11 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
         </section>
 
         <section className="elements">
-        {cards.map(({link, name, likes}, index) => (
+        {cards.map((card) => (
             <Card
-            link={link}
-            name={name}
-            likes={likes}
+            card={card}
             onCardClick={onCardClick}
-            key={`${name}_${index}`} />
+            key={card._id} />
         ))}
         </section>
     </main>

@@ -1,6 +1,6 @@
 import closeButton from "../images/Close_Icon.svg"
 
-function PopupWithForm ({name, title, isOpen, onClose, children, closePopupByClickOutside}) {
+function PopupWithForm ({name, title, isOpen, onClose, children, closePopupByClickOutside, buttonText}) {
     const handleSubmit = (evt) => {
         evt.preventDefault()
     }
@@ -25,6 +25,11 @@ function PopupWithForm ({name, title, isOpen, onClose, children, closePopupByCli
         >
             <h2 className="popup__title">{title}</h2>
             {children}
+            <button
+            className="popup__submit-button"
+            type="submit"
+            aria-label={buttonText}
+            >{buttonText}</button>
         </form>
         </div>
     </div>

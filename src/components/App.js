@@ -61,6 +61,7 @@ function App() {
       isOpen={isEditProfilePopupOpen}
       onClose={closeAllPopups}
       closePopupByClickOutside={closePopupByClickOutside}
+      buttonText="Сохранить"
       >
         <label className="popup__form-field">
           <input className="popup__input-field popup__input-field_type_title"
@@ -86,10 +87,6 @@ function App() {
           />
           <span className="popup__error" id="profile-subtitle-error" />
         </label>
-      <button
-      className="popup__submit-button"
-      type="submit"
-      aria-label="сохранить">Сохранить</button>
       </PopupWithForm>
       <PopupWithForm
       name="edit-avatar"
@@ -97,6 +94,7 @@ function App() {
       isOpen={isEditAvatarPopupOpen}
       onClose={closeAllPopups}
       closePopupByClickOutside={closePopupByClickOutside}
+      buttonText="Сохранить"
       >
         <label className="popup__form-field">
           <input className="popup__input-field popup__input-field_type_title"
@@ -110,10 +108,6 @@ function App() {
           />
           <span className="popup__error" id="avatar-url-error" />
         </label>
-      <button
-      className="popup__submit-button"
-      type="submit"
-      aria-label="сохранить">Сохранить</button>
       </PopupWithForm>
       <PopupWithForm
       name="new-picture"
@@ -121,6 +115,7 @@ function App() {
       isOpen={isAddPlacePopupOpen}
       onClose={closeAllPopups}
       closePopupByClickOutside={closePopupByClickOutside}
+      buttonText="Создать"
       >
         <label className="popup__form-field">
           <input className="popup__input-field popup__input-field_type_pic-title"
@@ -147,10 +142,6 @@ function App() {
           />
           <span className="popup__error" id="picture-url-error" />
         </label>
-      <button
-      className="popup__submit-button"
-      type="submit"
-      aria-label="создать">Создать</button>
     </PopupWithForm>
     <ImagePopup
       onClose={closeAllPopups}
