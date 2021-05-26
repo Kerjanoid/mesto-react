@@ -3,11 +3,6 @@ import addButton from "../images/plus.svg"
 import api from "../utils/Api"
 import {useEffect, useState} from "react"
 import Card from "./Card"
-import { containerSelector, templateElement, editProfile, editAvatar,
-    formProfElement,formPicElement, formAvatarElement, userNameInput,
-    userProfessionInput, addPicture, subtitleSelector, nameSelector,
-    avatarSelector, popupProfileSelector, popupCardSelector, popupImageSelector,
-    popupAvatarSelector, popupDeleteAgreementSelector, validationConfig, popupEditAvatar } from "../utils/constants.js"
 
 const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
     const [userName, setUserName] = useState("")

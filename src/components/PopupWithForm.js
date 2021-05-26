@@ -1,6 +1,9 @@
 import closeButton from "../images/Close_Icon.svg"
 
-function PopupWithForm ({name, title, isOpen, onClose, children, handleSubmit, closePopupByClickOutside}) {
+function PopupWithForm ({name, title, isOpen, onClose, children, closePopupByClickOutside}) {
+    const handleSubmit = (evt) => {
+        evt.preventDefault()
+    }
     return (
     <div className={`popup popup_${name} ${isOpen ? "popup_opened" : ""}`}
     onMouseUp={closePopupByClickOutside}>
@@ -18,7 +21,8 @@ function PopupWithForm ({name, title, isOpen, onClose, children, handleSubmit, c
         <form className={`popup__form popup__form_${name}`}
         name={name}
         onSubmit={handleSubmit}
-        noValidate>
+        noValidate
+        >
             <h2 className="popup__title">{title}</h2>
             {children}
         </form>
