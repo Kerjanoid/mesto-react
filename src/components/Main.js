@@ -1,6 +1,6 @@
 import editButton from "../images/Edit_button.svg"
 import addButton from "../images/plus.svg"
-import api from "../utils/Api"
+import api from "../utils/api"
 import {useEffect, useState} from "react"
 import Card from "./Card"
 
