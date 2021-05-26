@@ -1,19 +1,19 @@
 import closeButton from "../images/Close_Icon.svg"
 
-const ImagePopup = ({isOpen, onClose, closePopupByClickOutside}) => {
+const ImagePopup = ({card, onClose, closePopupByClickOutside}) => {
     return (
-    <div className={`popup popup_view-picture ${isOpen ? "popup_opened" : ""}`}>
+    <div className={`popup popup_view-picture ${card.isOpened ? "popup_opened" : ""}`}
+    onMouseUp={closePopupByClickOutside}>
         <figure className="popup__view-window">
             <button type="button"
             className="popup__close-button"
             aria-label="закрыть"
             onClick={onClose}
-            closePopupByClickOutside={closePopupByClickOutside}
             >
                 <img className="popup__close-button-img" src={closeButton} alt="закрыть" />
             </button>
-            <img className="popup__huge-picture" src={addButton} alt=" " />
-            <figcaption className="popup__figcaption"></figcaption>
+            <img className="popup__huge-picture" src={card.link} alt={card.name} />
+            <figcaption className="popup__figcaption">{card.name}</figcaption>
         </figure>
     </div>
     )

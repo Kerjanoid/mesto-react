@@ -7,7 +7,8 @@ import EditProfilePopup from "./EditProfilePopup"
 import EditAvatarPopup from "./EditAvatarPopup"
 import AddCardPopup from "./AddCardPopup"
 import PopupConfirm from "./PopupConfirm"
-import {useEffect, useState} from "react"
+import ImagePopup from "./ImagePopup"
+import {useState} from "react"
 import { containerSelector } from "../utils/constants"
 
 function App() {
@@ -16,7 +17,15 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false)
-  // const [selectedCard, setSelectedCard] = useState({isOpened: false,})
+  const [selectedCard, setSelectedCard] = useState({isOpened: false})
+
+  const handleCardClick = ({link, name, isOpened}) => {
+    setSelectedCard({
+      link,
+      name,
+      isOpened: !isOpened,
+    })
+  }
 
   //Обработчики открытия попапов
   function handleEditAvatarClick() {
@@ -38,7 +47,7 @@ function App() {
     setIsAddPlacePopupOpen(false)
     setIsEditAvatarPopupOpen(false)
     setIsConfirmPopupOpen(false)
-  //setSelectedCard({ isOpened: false })
+    setSelectedCard({isOpened: false})
   }
 
   //Закрытие попапа по клику вне формы
@@ -56,14 +65,13 @@ function App() {
         onAddPlace={handleAddPlaceClick}
         onEditAvatar={handleEditAvatarClick} 
         onCardDelete={handleConfirmClick}
+        onCardClick={handleCardClick}
       />
       <Footer />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen}
         onClose={closeAllPopups}
-        //onUpdateUser={handleUpdateUser}
         closePopupByClickOutside={closePopupByClickOutside}
-        //waiting={waiting || 'Сохранить'}
       />
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}
@@ -80,20 +88,12 @@ function App() {
         onClose={closeAllPopups}
         closePopupByClickOutside={closePopupByClickOutside}
       />
+      <ImagePopup
+        onClose={closeAllPopups}
+        card={selectedCard}
+        closePopupByClickOutside={closePopupByClickOutside}
+      />
 
-  <template className="template">
-    <article className="element">
-      <img className="element__img" src="placeholder" alt="" />
-      <div className="element__options">
-        <h2 className="element__title"></h2>
-        <div className="element__like-block">
-          <button className="element__like" aria-label="лайк" type="button"></button>
-          <p className="element__like-counter">0</p>
-        </div>
-      </div>
-      <button type="button" className="element__trash-button" aria-label="удалить"></button>
-    </article>
-  </template>
     </div>
   )
 }
