@@ -18,15 +18,15 @@ function App() {
   }
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen)
-  } 
+  }
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
   }
   const handleCardClick = ({link, name, isOpened}) => {
     setSelectedCard({
-      link,
-      name,
-      isOpened: !isOpened,
+    link,
+    name,
+    isOpened: !isOpened,
     })
   }
 
