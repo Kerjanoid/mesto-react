@@ -1,31 +1,24 @@
 import editButton from "../images/Edit_button.svg"
 import addButton from "../images/plus.svg"
 import api from "../utils/api"
-import {useEffect, useState} from "react"
+import {useContext, useState} from "react"
 import Card from "./Card"
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
-  const [userName, setUserName] = useState("")
-  const [userDescription, setUserDescription] = useState("")
-  const [userAvatar, setUserAvatar] = useState("")
+const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike}) => {
   const [cards, setCards] = useState([])
+  const {name, avatar, about} = useContext(CurrentUserContext)
+  const currentUserId = useContext(CurrentUserContext)._id
 
-  useEffect(() => {
-    api.getUserInformation().then(({avatar, about, name}) => {
-      setUserAvatar(avatar)
-      setUserDescription(about)
-      setUserName(name)
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-    api.getInitialCards().then((data) => {
-      setCards(data)
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-  }, [])
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(i => i._id === currentUserId);
+
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+    });
+}
 
   return (
   <main className="content">
@@ -33,7 +26,7 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
       <div className="profile__data">
         <div className="avatar"
         onClick={onEditAvatar}
-        style={{ backgroundImage: `url(${userAvatar})` }}
+        style={{ backgroundImage: `url(${avatar})` }}
         >
           <div className="avatar__cover">
           <img className="avatar__edit-button-img"
@@ -42,7 +35,7 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
           </div>
         </div>
         <div className="profile__info">
-          <h1 className="profile__title">{userName}</h1>
+          <h1 className="profile__title">{name}</h1>
           <button className="profile__edit-button"
           onClick={onEditProfile}
           aria-label="редактировать"
@@ -51,7 +44,7 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
             src={editButton}
             alt="редактирование профиля" />
           </button>
-          <p className="profile__subtitle">{userDescription}</p>
+          <p className="profile__subtitle">{about}</p>
         </div>
       </div>
       <button
@@ -71,7 +64,8 @@ const Main = ({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) => {
         <Card
         card={card}
         onCardClick={onCardClick}
-        key={card._id} />
+        key={card._id}
+        onCardLike={handleCardLike} />
       ))}
     </section>
   </main>
