@@ -2,7 +2,7 @@ const Card = ({card, onCardClick}) => {
   const handleClick = () => {
     onCardClick(card)
   }
-
+  
   return(
   <article className="element">
     <img className="element__img"
