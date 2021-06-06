@@ -31,10 +31,7 @@ class Api {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({
-        name: userData['profile-titel'],
-        about: userData['profile-subtitel']
-      })
+      body: JSON.stringify(userData)
     })
       .then(this._checkResponse)
   }
@@ -43,9 +40,7 @@ class Api {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this._headers,
-      body: JSON.stringify({
-        avatar: userAvatar['avatar-url']
-      })
+      body: JSON.stringify(userAvatar)
     })
       .then(this._checkResponse);
   }
