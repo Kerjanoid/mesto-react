@@ -2,9 +2,9 @@ import "../pages/index.css"
 import Header from "./Header"
 import Main from "./Main"
 import Footer from "./Footer"
-import PopupWithForm from "./PopupWithForm"
 import EditProfilePopup from "./EditProfilePopup"
 import EditAvatarPopup from "./EditAvatarPopup"
+import AddPlacePopup from "./AddPlacePopup"
 import ImagePopup from "./ImagePopup"
 import {useEffect, useState} from "react"
 import api from "../utils/api"
@@ -16,6 +16,9 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState({})
   const [selectedCard, setSelectedCard] = useState({isOpened: false})
+  const [cards, setCards] = useState([])
+  const [waiting, setWaiting] = useState(null)
+  const [buttonDisable, setButtonDisable] = useState(false)
 
   useEffect(() => {
     api.getUserInformation().then((userData) => {
@@ -24,15 +27,26 @@ function App() {
     .catch(err => console.log(err))
   }, [])
 
+  useEffect(() => {
+    api.getInitialCards()
+      .then((cardsData) => {
+      setCards(cardsData)
+    })
+    .catch(err => console.log(err))
+  }, [])
+
   //Обработчики открытия попапов
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
+    setButtonDisable(false)
   }
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen)
+    setButtonDisable(false)
   }
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
+    setButtonDisable(false)
   }
 
   //Обработчик информации о пользователе
@@ -40,9 +54,12 @@ function App() {
     api.editProfile(userData)
       .then((data) => {
       setCurrentUser(data)
+      setWaiting(null)
       closeAllPopups()
     })
       .catch(err => console.log(err))
+      setButtonDisable(true)
+      setWaiting('Сохранение...')
   }
 
   //Обработчик информации об аватаре
@@ -50,11 +67,44 @@ function App() {
     api.editAvatar(userAvatar)
       .then((data) => {
       setCurrentUser(data)
+      setWaiting(null)
       closeAllPopups()
     })
       .catch(err => console.log(err))
+      setButtonDisable(true)
+      setWaiting('Сохранение...')
   }
 
+  //Обработчик лайков
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some(i => i._id === currentUser._id)
+    api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c))
+    })
+    .catch(err => console.log(err))
+  }
+
+  //Обработчик удаления карточки
+  const handleCardDelete = (card) => {
+    api.removeCard(card._id).then(() => {
+      setCards((state) => state.filter((c) => c._id !== card._id))
+    })
+    .catch(err => console.log(err))
+  }
+
+  //Обработчик добавления карточки
+  const handleAddPlaceSubmit = (newCard) => {
+    api.addCard(newCard).then((newCard) => {
+      setCards([newCard, ...cards])
+      setWaiting(null)
+      closeAllPopups()
+    })
+      .catch(err => console.log(err))
+      setButtonDisable(true)
+      setWaiting('Добавление...')
+  }
+
+  //Обработчик клика по карточке
   const handleCardClick = ({link, name, isOpened}) => {
     setSelectedCard({
     link,
@@ -87,6 +137,9 @@ function App() {
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          cards={cards}
         />
         <Footer />
         <EditProfilePopup
@@ -94,6 +147,8 @@ function App() {
           onClose={closeAllPopups}
           closePopupByClickOutside={closePopupByClickOutside}
           onUpdateUser={handleUpdateUser}
+          waiting={waiting || 'Сохранить'}
+          isDisable={buttonDisable}
         >
         </EditProfilePopup>
         <EditAvatarPopup
@@ -101,47 +156,24 @@ function App() {
           onClose={closeAllPopups}
           closePopupByClickOutside={closePopupByClickOutside}
           onUpdateAvatar={handleUpdateAvatar}
+          waiting={waiting || 'Сохранить'}
+          isDisable={buttonDisable}
         >
         </EditAvatarPopup>
-        <PopupWithForm
-          name="new-picture"
-          title="Новое место"
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           closePopupByClickOutside={closePopupByClickOutside}
-          buttonText="Создать"
-          >
-            <label className="popup__form-field">
-              <input className="popup__input-field popup__input-field_type_pic-title"
-              required
-              placeholder="Название"
-              type="text"
-              defaultValue=""
-              name="picture-title"
-              minLength="2"
-              maxLength="40"
-              />
-              <span className="popup__error" id="picture-title-error" />
-            </label>
-            <label className="popup__form-field">
-              <input
-              className="popup__input-field popup__input-field_type_pic-link"
-              required
-              placeholder="Ссылка на изорбажение"
-              type="url"
-              defaultValue=""
-              name="picture-url"
-              minLength="2"
-              maxLength="200"
-              />
-              <span className="popup__error" id="picture-url-error" />
-            </label>
-      </PopupWithForm>
-      <ImagePopup
-        onClose={closeAllPopups}
-        card={selectedCard}
-        closePopupByClickOutside={closePopupByClickOutside}
-      />
+          onAddPlace={handleAddPlaceSubmit}
+          waiting={waiting || 'Добавить'}
+          isDisable={buttonDisable}
+        >
+        </AddPlacePopup>
+        <ImagePopup
+          onClose={closeAllPopups}
+          card={selectedCard}
+          closePopupByClickOutside={closePopupByClickOutside}
+        />
       </div>
     </CurrentUserContext.Provider>
   )

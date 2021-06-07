@@ -1,8 +1,7 @@
 import PopupWithForm from "./PopupWithForm"
 import {useRef} from "react"
-import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-function EditAvatarPopup ({isOpen, onClose, closePopupByClickOutside, onUpdateAvatar}) {
+function EditAvatarPopup ({isOpen, onClose, closePopupByClickOutside, onUpdateAvatar, waiting, isDisable}) {
   const avatarRef = useRef(null)
   function handleSubmit(e) {
     e.preventDefault()
@@ -20,7 +19,8 @@ function EditAvatarPopup ({isOpen, onClose, closePopupByClickOutside, onUpdateAv
       onClose={onClose}
       closePopupByClickOutside={closePopupByClickOutside}
       handleSubmit={handleSubmit}
-      buttonText="Сохранить"
+      buttonText={waiting}
+      isDisable={isDisable}
       >
         <label className="popup__form-field">
           <input

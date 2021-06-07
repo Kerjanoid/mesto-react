@@ -49,10 +49,7 @@ class Api {
     return fetch(`${this._baseUrl}/cards`, {
       method: 'POST',
       headers: this._headers,
-      body: JSON.stringify({
-        name: cardData['picture-titel'],
-        link: cardData['picture-url']
-      })
+      body: JSON.stringify(cardData)
     })
       .then(this._checkResponse)
   }
@@ -74,7 +71,7 @@ class Api {
       headers: this._headers,
       method:'DELETE',
     }
-    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, isLiked ? putLike : delLike)
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, isLiked ? delLike : putLike)
       .then(this._checkResponse)
   }
 }

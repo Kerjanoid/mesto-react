@@ -2,27 +2,27 @@ import PopupWithForm from "./PopupWithForm"
 import {useContext, useEffect, useState} from "react"
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateUser}) {
+function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateUser, waiting, isDisable}) {
   const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
+  const [about, setAbout] = useState('')
   const currentUser = useContext(CurrentUserContext)
 
   useEffect(() => {
     setName(currentUser.name);
-    setDescription(currentUser.about);
+    setAbout(currentUser.about);
   }, [currentUser, isOpen]);
 
   function handleNameChange(e) {
     setName(e.target.value)
   }
-  function handleDescriptionChange(e) {
-    setDescription(e.target.value)
+  function handleAboutChange(e) {
+    setAbout(e.target.value)
   }
   function handleSubmit(e) {
     e.preventDefault();
     onUpdateUser({
       name,
-      about: description,
+      about,
     })
   }
 
@@ -35,7 +35,8 @@ function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateU
       onClose={onClose}
       closePopupByClickOutside={closePopupByClickOutside}
       handleSubmit={handleSubmit}
-      buttonText="Сохранить"
+      buttonText={waiting}
+      isDisable={isDisable}
       >
         <label className="popup__form-field">
           <input className="popup__input-field popup__input-field_type_title"
@@ -59,8 +60,8 @@ function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateU
           name="profile-subtitle"
           minLength="2"
           maxLength="200"
-          onChange={handleDescriptionChange}
-          value={description || ''}
+          onChange={handleAboutChange}
+          value={about || ''}
           />
           <span className="popup__error" id="profile-subtitle-error" />
         </label>
