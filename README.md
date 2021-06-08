@@ -5,3 +5,5 @@
 Пути к файлам и организация файлов сделана по БЭМ.
 
 Страница создана с использованием HTML, CSS, ReactJS.
+
+* [Ссылка на проект на GitPages](https://kerjanoid.github.io/mesto-react/)
