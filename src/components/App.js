@@ -8,7 +8,8 @@ import AddPlacePopup from "./AddPlacePopup"
 import ImagePopup from "./ImagePopup"
 import {useEffect, useState} from "react"
 import api from "../utils/api"
-import {CurrentUserContext} from '../contexts/CurrentUserContext';
+import {CurrentUserContext} from '../contexts/CurrentUserContext'
+import {BrowserRouter} from 'react-router-dom'
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
@@ -18,7 +19,6 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({isOpened: false})
   const [cards, setCards] = useState([])
   const [waiting, setWaiting] = useState(null)
-  const [buttonDisable, setButtonDisable] = useState(false)
 
   useEffect(() => {
     api.getUserInformation().then((userData) => {
@@ -38,41 +38,36 @@ function App() {
   //Обработчики открытия попапов
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen)
-    setButtonDisable(false)
   }
   function handleEditProfileClick() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen)
-    setButtonDisable(false)
   }
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(!isAddPlacePopupOpen)
-    setButtonDisable(false)
   }
 
   //Обработчик информации о пользователе
   const handleUpdateUser = (userData) => {
+    setWaiting('Сохранение...')
     api.editProfile(userData)
       .then((data) => {
       setCurrentUser(data)
-      setWaiting(null)
       closeAllPopups()
     })
       .catch(err => console.log(err))
-      setButtonDisable(true)
-      setWaiting('Сохранение...')
+      .finally(() => {setWaiting(null)})
   }
 
   //Обработчик информации об аватаре
   const handleUpdateAvatar = (userAvatar) => {
+    setWaiting('Сохранение...')
     api.editAvatar(userAvatar)
       .then((data) => {
       setCurrentUser(data)
-      setWaiting(null)
       closeAllPopups()
     })
       .catch(err => console.log(err))
-      setButtonDisable(true)
-      setWaiting('Сохранение...')
+      .finally(() => {setWaiting(null)})
   }
 
   //Обработчик лайков
@@ -94,14 +89,13 @@ function App() {
 
   //Обработчик добавления карточки
   const handleAddPlaceSubmit = (newCard) => {
+    setWaiting('Добавление...')
     api.addCard(newCard).then((newCard) => {
       setCards([newCard, ...cards])
-      setWaiting(null)
       closeAllPopups()
     })
       .catch(err => console.log(err))
-      setButtonDisable(true)
-      setWaiting('Добавление...')
+      .finally(() => {setWaiting(null)})
   }
 
   //Обработчик клика по карточке
@@ -130,6 +124,7 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
+    <BrowserRouter>
       <div className="root">
         <Header />
         <Main
@@ -147,8 +142,7 @@ function App() {
           onClose={closeAllPopups}
           closePopupByClickOutside={closePopupByClickOutside}
           onUpdateUser={handleUpdateUser}
-          waiting={waiting || 'Сохранить'}
-          isDisable={buttonDisable}
+          waiting={waiting}
         >
         </EditProfilePopup>
         <EditAvatarPopup
@@ -156,8 +150,7 @@ function App() {
           onClose={closeAllPopups}
           closePopupByClickOutside={closePopupByClickOutside}
           onUpdateAvatar={handleUpdateAvatar}
-          waiting={waiting || 'Сохранить'}
-          isDisable={buttonDisable}
+          waiting={waiting}
         >
         </EditAvatarPopup>
         <AddPlacePopup
@@ -165,8 +158,7 @@ function App() {
           onClose={closeAllPopups}
           closePopupByClickOutside={closePopupByClickOutside}
           onAddPlace={handleAddPlaceSubmit}
-          waiting={waiting || 'Добавить'}
-          isDisable={buttonDisable}
+          waiting={waiting}
         >
         </AddPlacePopup>
         <ImagePopup
@@ -175,6 +167,7 @@ function App() {
           closePopupByClickOutside={closePopupByClickOutside}
         />
       </div>
+    </BrowserRouter>
     </CurrentUserContext.Provider>
   )
 }

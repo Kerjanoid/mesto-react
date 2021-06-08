@@ -1,7 +1,9 @@
+import {Link} from 'react-router-dom'
+
 function Header() {
   return (
   <header className="header">
-    <a className="header__logo" href="/" target="_self" rel="noopener"></a>
+    <Link className="header__logo" to="/" target="_self" rel="noopener"></Link>
   </header>
   )
 }

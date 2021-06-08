@@ -2,7 +2,7 @@ import PopupWithForm from "./PopupWithForm"
 import {useContext, useEffect, useState} from "react"
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
 
-function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateUser, waiting, isDisable}) {
+function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateUser, waiting}) {
   const [name, setName] = useState('')
   const [about, setAbout] = useState('')
   const currentUser = useContext(CurrentUserContext)
@@ -35,8 +35,7 @@ function EditProfilePopup ({isOpen, onClose, closePopupByClickOutside, onUpdateU
       onClose={onClose}
       closePopupByClickOutside={closePopupByClickOutside}
       handleSubmit={handleSubmit}
-      buttonText={waiting}
-      isDisable={isDisable}
+      buttonText={waiting || 'Сохранить'}
       >
         <label className="popup__form-field">
           <input className="popup__input-field popup__input-field_type_title"

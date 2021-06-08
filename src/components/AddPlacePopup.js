@@ -2,7 +2,7 @@ import PopupWithForm from "./PopupWithForm"
 import {useState} from "react"
 
 
-function AddPlacePopup ({isOpen, onClose, closePopupByClickOutside, onAddPlace, waiting, isDisable}) {
+function AddPlacePopup ({isOpen, onClose, closePopupByClickOutside, onAddPlace, waiting}) {
   const [name, setName] = useState('')
   const [link, setLink] = useState('')
 
@@ -22,7 +22,6 @@ function AddPlacePopup ({isOpen, onClose, closePopupByClickOutside, onAddPlace, 
     setLink('')
   }
 
-
   return (
     <PopupWithForm
     name="new-picture"
@@ -30,9 +29,8 @@ function AddPlacePopup ({isOpen, onClose, closePopupByClickOutside, onAddPlace, 
     isOpen={isOpen}
     onClose={onClose}
     closePopupByClickOutside={closePopupByClickOutside}
-    buttonText={waiting}
+    buttonText={waiting || 'Добавить'}
     handleSubmit={handleSubmit}
-    isDisable={isDisable}
     >
       <label className="popup__form-field">
         <input className="popup__input-field popup__input-field_type_pic-title"

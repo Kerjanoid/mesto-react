@@ -1,6 +1,6 @@
 import closeButton from "../images/Close_Icon.svg"
 
-function PopupWithForm ({name, title, isOpen, onClose, children, closePopupByClickOutside, buttonText, handleSubmit, isDisable}) {
+function PopupWithForm ({name, title, isOpen, onClose, children, closePopupByClickOutside, buttonText, handleSubmit}) {
   return (
   <div className={`popup popup_${name} ${isOpen ? "popup_opened" : ""}`}
   onMouseUp={closePopupByClickOutside}>
@@ -22,7 +22,7 @@ function PopupWithForm ({name, title, isOpen, onClose, children, closePopupByCli
       <h2 className="popup__title">{title}</h2>
       {children}
       <button
-      className={`popup__submit-button ${isDisable ? "popup__submit-button_disabled" : ""}`}
+      className="popup__submit-button"
       type="submit"
       aria-label={buttonText}
       >{buttonText}</button>
