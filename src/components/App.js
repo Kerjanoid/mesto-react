@@ -9,7 +9,6 @@ import ImagePopup from "./ImagePopup"
 import {useEffect, useState} from "react"
 import api from "../utils/api"
 import {CurrentUserContext} from '../contexts/CurrentUserContext'
-import {BrowserRouter} from 'react-router-dom'
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
@@ -124,7 +123,6 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-    <BrowserRouter>
       <div className="root">
         <Header />
         <Main
@@ -167,7 +165,6 @@ function App() {
           closePopupByClickOutside={closePopupByClickOutside}
         />
       </div>
-    </BrowserRouter>
     </CurrentUserContext.Provider>
   )
 }
